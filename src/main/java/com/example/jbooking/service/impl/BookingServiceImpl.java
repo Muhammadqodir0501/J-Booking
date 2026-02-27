@@ -14,6 +14,7 @@ import com.example.jbooking.repository.HotelRepository;
 import com.example.jbooking.repository.RoomRepository;
 import com.example.jbooking.repository.UserRepository;
 import com.example.jbooking.service.abstaction.BookingService;
+import com.example.jbooking.service.abstaction.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final BookingMapper bookingMapper;
     private final HotelRepository hotelRepository;
+    private final PaymentService paymentService;
 
     @Transactional
     @Override
@@ -73,7 +75,15 @@ public class BookingServiceImpl implements BookingService {
                 .status(BookingStatus.CREATED)
                 .build();
 
-        return bookingMapper.toDto(bookingRepository.save(newBooking));
+        newBooking = bookingRepository.save(newBooking);
+
+        paymentService.initiatePayment(
+                newBooking.getId(),
+                totalPrice,
+                request.getSenderToken()
+        );
+
+        return bookingMapper.toDto(newBooking);
     }
 
     @Override

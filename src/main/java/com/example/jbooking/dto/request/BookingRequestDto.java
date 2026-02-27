@@ -24,4 +24,7 @@ public class BookingRequestDto {
     @Future(message = "Дата выезда должна быть в будущем")
     private LocalDate checkOutDate;
 
+    @NotNull
+    private String senderToken;
+
 }
