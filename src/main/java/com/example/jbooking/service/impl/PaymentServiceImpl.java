@@ -72,6 +72,12 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findByBankTransactionId(webhookPayload.getId())
                 .orElseThrow(() -> new NotFoundException("Платеж с bankTransactionId " + webhookPayload.getId() + " не найден"));
 
+        if (payment.getStatus() != PaymentStatus.PENDING) {
+            log.info("Игнорирование вебхука: транзакция {} уже обработана со статусом {}",
+                    payment.getBankTransactionId(), payment.getStatus());
+            return;
+        }
+
         Booking booking = bookingRepository.findById(payment.getBookingId())
                 .orElseThrow(() -> new NotFoundException("Бронь не найдена"));
 
