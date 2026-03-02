@@ -76,12 +76,12 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         newBooking = bookingRepository.save(newBooking);
-
+        /*
         paymentService.initiatePayment(
                 newBooking.getId(),
                 totalPrice,
                 request.getSenderToken()
-        );
+        );*/
 
         return bookingMapper.toDto(newBooking);
     }

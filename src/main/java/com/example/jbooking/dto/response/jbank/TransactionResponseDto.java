@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Data
 public class TransactionResponseDto {
-    private UUID id;              // Это bank_transaction_id
+    private UUID id;              // bank_transaction_id
     private UUID referenceId;
     private String status;        // "CREATED"
     private BigDecimal amount;
